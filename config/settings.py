@@ -33,6 +33,8 @@ CUSTOMED_APPS = [
     "users.apps.UsersConfig",
 ]
 
+THIRD_PARTY_APPS = ["rest_framework"]
+
 DEFAULT_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -42,7 +44,7 @@ DEFAULT_APPS = [
     "django.contrib.staticfiles",
 ]
 
-INSTALLED_APPS = CUSTOMED_APPS + DEFAULT_APPS
+INSTALLED_APPS = CUSTOMED_APPS + THIRD_PARTY_APPS + DEFAULT_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
