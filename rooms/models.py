@@ -17,7 +17,7 @@ class Amenity(Common):
         return self.name
 
 
-class Room(models.Model):
+class Room(Common):
 
     """Room Model Definition"""
 

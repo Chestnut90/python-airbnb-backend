@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 CUSTOMED_APPS = [
     "users.apps.UsersConfig",
+    "rooms.apps.RoomsConfig",
+    "reviews.apps.ReviewsConfig",
 ]
 
 THIRD_PARTY_APPS = ["rest_framework"]
