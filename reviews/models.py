@@ -9,7 +9,7 @@ class Review(Common):
     user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
-        related_name="reivews",
+        related_name="reviews",
     )
     room = models.ForeignKey(
         "rooms.Room",

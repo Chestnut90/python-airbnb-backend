@@ -22,4 +22,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/users/", include("users.urls")),
     path("api/v1/rooms/", include("rooms.urls")),
+    # my review
+    path("api/v1/reviews/", include("reviews.urls")),
 ]

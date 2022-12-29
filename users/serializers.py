@@ -17,4 +17,4 @@ class UserPrivateSerializer(ModelSerializer):
 class UserPublicSerialzier(ModelSerializer):
     class Meta:
         model = User
-        fields = ("username", "email")
+        fields = ("name", "email")

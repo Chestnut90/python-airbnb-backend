@@ -18,7 +18,7 @@ def get_amenity(pk):
     try:
         return Amenity.objects.get(pk=pk)
     except Amenity.DoesNotExist:
-        raise NotFound
+        raise NotFound("Amenity Not Found.")
 
 
 class AmenitiesAPIView(APIView):
@@ -97,18 +97,19 @@ class RoomsAPIView(APIView):
             return Response(serializer.errors)
 
 
+def get_room(pk):
+    try:
+        return Room.objects.get(pk=pk)
+    except Room.DoesNotExist:
+        raise NotFound("Room Not Found.")
+
+
 class RoomAPIView(APIView):
     # check permission of request user info.
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def _get_room(self, pk):
-        try:
-            return Room.objects.get(pk=pk)
-        except Room.DoesNotExist:
-            raise NotFound
-
     def get(self, request, pk):
-        room = self._get_room(pk)
+        room = get_room(pk)
         serializer = serializers.RoomSerializer(room)
         return Response(data=serializer.data)
 
@@ -119,3 +120,49 @@ class RoomAPIView(APIView):
         room = self._get_room(pk)
         room.delete()
         return Response(HTTP_204_NO_CONTENT)
+
+
+from reviews.serializers import ReviewSerializer
+
+
+class RoomReviewsAPIView(APIView):
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    _page_size = 2
+
+    def get_reviews_with_page(self, room, page):
+        # TODO : no empty list return-able.
+        try:
+            page = int(page)
+        except ValueError:
+            page = 1
+
+        page_size = 2  # global value
+        start = (page - 1) * page_size
+        end = start + page_size
+
+        # room.reviews.all() => query set.
+        return room.reviews.all()[start:end]
+
+    def get(self, request, pk):
+        room = get_room(pk)
+
+        serializer = ReviewSerializer(
+            self.get_reviews_with_page(room, request.query_params.get("page", 1)),
+            many=True,
+        )
+        return Response(serializer.data)
+
+    def post(self, request, pk):
+        room = get_room(pk)
+
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid():
+            with transaction.atomic():
+                review = serializer.save(
+                    user=request.user,
+                    room=room,
+                )
+            return Response(ReviewSerializer(review).data)
+        else:
+            return Response(serializer.errors)
