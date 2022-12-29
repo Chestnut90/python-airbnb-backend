@@ -1,3 +1,5 @@
+from statistics import mean
+
 from django.db import models
 from users.models import User
 
@@ -57,3 +59,11 @@ class Room(Common):
 
     def total_amenities(self) -> int:
         return self.amenities.count()
+
+    def get_rating(self):
+        return round(
+            0
+            if self.amenities.count() == 0
+            else mean([r.rating for r in self.reviews.all()]),
+            1,
+        )
