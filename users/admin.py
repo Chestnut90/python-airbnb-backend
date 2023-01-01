@@ -11,11 +11,21 @@ class MyUserAdmin(UserAdmin):
             "Personal info",
             {
                 "fields": (
+                    "avatar",
                     "name",
                     "gender",
-                    "first_name",
-                    "last_name",
+                    "language",
+                    "currency",
                     "email",
+                )
+            },
+        ),
+        (
+            "No Used",
+            {
+                "fields": (
+                    # "first_name",
+                    # "last_name",
                 )
             },
         ),
