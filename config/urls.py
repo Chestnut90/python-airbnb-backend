@@ -14,7 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls.static import static
 from django.urls import path, include
+
+from django.conf import settings
 
 api_v1 = "api/v1/"
 
@@ -24,4 +27,4 @@ urlpatterns = [
     path("api/v1/rooms/", include("rooms.urls")),
     # my review
     path("api/v1/reviews/", include("reviews.urls")),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

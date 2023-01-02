@@ -33,9 +33,13 @@ CUSTOMED_APPS = [
     "users.apps.UsersConfig",
     "rooms.apps.RoomsConfig",
     "reviews.apps.ReviewsConfig",
+    "medias.apps.MediasConfig",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework"]
+THIRD_PARTY_APPS = [
+    "rest_framework",
+    "rest_framework.authtoken",
+]
 
 DEFAULT_APPS = [
     "django.contrib.admin",
@@ -139,5 +143,11 @@ AUTH_USER_MODEL = "users.User"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
+        "config.authentication.TrustMeAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "config.authentication.JWTAuthentication",
     ],
 }  # default setting
+
+MEDIA_ROOT = "uploads"
+MEDIA_URL = "user-uploads/"

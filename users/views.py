@@ -1,11 +1,13 @@
-from django.shortcuts import render
 from django.contrib.auth import login, logout, authenticate
+from django.conf import settings
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import exceptions
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+
+import jwt
 
 from . import serializers
 from .models import User
@@ -83,6 +85,32 @@ class SignInAPIView(APIView):
         if not User.objects.filter(username=username).exists():
             raise exceptions.ParseError("no matched id")
         raise exceptions.ParseError("invaid password")
+
+
+class JWTSignInAPIView(APIView):
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        if not username or not password:
+            raise exceptions.ParseError
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password,
+        )
+        if user:
+            token = jwt.encode(
+                {"pk": user.pk},  # un-limited token.
+                settings.SECRET_KEY,
+                algorithm="HS256",
+            )
+            return Response({"token": token})
+
+        return Response(
+            {"error", "wrong password"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 class SignOutAPIView(APIView):
