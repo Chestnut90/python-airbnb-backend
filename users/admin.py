@@ -5,33 +5,28 @@ from .models import User
 
 @admin.register(User)
 class MyUserAdmin(UserAdmin):
+    readonly_fields = ("first_name", "last_name")
     fieldsets = (
-        (None, {"fields": ("username", "password")}),
         (
             "Personal info",
             {
+                "classes": ("wide",),
                 "fields": (
                     "avatar",
+                    "username",
+                    "password",
                     "name",
+                    "email",
                     "gender",
                     "language",
                     "currency",
-                    "email",
-                )
-            },
-        ),
-        (
-            "No Used",
-            {
-                "fields": (
-                    # "first_name",
-                    # "last_name",
-                )
+                ),
             },
         ),
         (
             "Permissions",
             {
+                "classes": ("collapse",),
                 "fields": (
                     "is_active",
                     "is_staff",
@@ -44,10 +39,13 @@ class MyUserAdmin(UserAdmin):
         (
             "Important dates",
             {
+                "classes": ("collapse",),
                 "fields": (
                     "last_login",
                     "date_joined",
-                )
+                ),
             },
         ),
     )
+
+    list_display = ("username", "email", "name", "is_host")
