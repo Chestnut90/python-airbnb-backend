@@ -9,18 +9,22 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
 from pathlib import Path
+import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-w(fo&0znklqfja_7d%sap%_^^upmx$9v(cmd)#0)#-r=q7sw*6"
+SECRET_KEY = env("SECRET_KEY")
+GITHUB_SECRET_KEY = env("GITHUB_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,6 +43,7 @@ CUSTOMED_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
+    "corsheaders",
 ]
 
 DEFAULT_APPS = [
@@ -55,6 +60,7 @@ INSTALLED_APPS = CUSTOMED_APPS + THIRD_PARTY_APPS + DEFAULT_APPS
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -116,9 +122,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ko-kr"  # "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Seoul"  # "UTC"
 
 USE_I18N = True
 
@@ -151,3 +157,9 @@ REST_FRAMEWORK = {
 
 MEDIA_ROOT = "uploads"
 MEDIA_URL = "user-uploads/"
+
+
+# add cors
+CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000"]
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000"]
+CORS_ALLOW_CREDENTIALS = True
