@@ -63,7 +63,7 @@ class Room(Common):
     def get_rating(self):
         return round(
             0
-            if self.amenities.count() == 0
+            if self.reviews.count() == 0
             else mean([r.rating for r in self.reviews.all()]),
             1,
         )
