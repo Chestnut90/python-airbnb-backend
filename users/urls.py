@@ -11,4 +11,6 @@ urlpatterns = [
     path("me", views.MeAPIView.as_view()),
     path("signin", views.SignInAPIView.as_view()),
     path("signout", views.SignOutAPIView.as_view()),
+    path("signin-github", views.SignInWithGithubAPIView.as_view()),
+    path("signin-kakao", views.SignInWithKakaoAPIView.as_view()),
 ]
