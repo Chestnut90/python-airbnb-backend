@@ -38,6 +38,7 @@ CUSTOMED_APPS = [
     "rooms.apps.RoomsConfig",
     "reviews.apps.ReviewsConfig",
     "medias.apps.MediasConfig",
+    "wishlists.apps.WishlistsConfig",
 ]
 
 THIRD_PARTY_APPS = [
