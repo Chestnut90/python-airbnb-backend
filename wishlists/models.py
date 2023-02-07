@@ -13,7 +13,7 @@ class Wishlist(Common):
         related_name="wish_rooms",
     )
     user = models.ForeignKey(
-        "users.user",
+        "users.User",
         on_delete=models.CASCADE,
     )
 
