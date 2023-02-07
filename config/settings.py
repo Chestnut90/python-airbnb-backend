@@ -40,6 +40,7 @@ CUSTOMED_APPS = [
     "medias.apps.MediasConfig",
     "wishlists.apps.WishlistsConfig",
     "bookings.apps.BookingsConfig",
+    "direct_messages.apps.DirectMessagesConfig",
 ]
 
 THIRD_PARTY_APPS = [
