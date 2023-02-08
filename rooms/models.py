@@ -39,10 +39,16 @@ class Room(Common):
 
     price = models.PositiveIntegerField()
 
-    kind = models.CharField(max_length=20, choices=RoomKindChoices.choices)
+    kind = models.CharField(
+        max_length=20,
+        choices=RoomKindChoices.choices,
+    )
     rooms = models.PositiveIntegerField()
     toilets = models.PositiveIntegerField()
-    amenities = models.ManyToManyField("rooms.Amenity", related_name="rooms")
+    amenities = models.ManyToManyField(
+        "rooms.Amenity",
+        related_name="rooms",
+    )
 
     pet_friendly = models.BooleanField(default=True)
 
@@ -61,9 +67,7 @@ class Room(Common):
         return self.amenities.count()
 
     def get_rating(self):
-        return round(
-            0
-            if self.reviews.count() == 0
-            else mean([r.rating for r in self.reviews.all()]),
-            1,
-        )
+        average = 0
+        if self.reviews.count() != 0:
+            average = mean([r.rating for r in self.reviews.all()])
+        return round(average, 1)
