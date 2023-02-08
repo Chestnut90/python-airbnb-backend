@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.shortcuts import render
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,6 +12,18 @@ from rest_framework.status import (
 
 from .models import Amenity, Room
 from . import serializers
+
+
+def see_all_rooms(request):
+    rooms = Room.objects.all()
+    return render(
+        request,
+        "all_rooms.html",
+        {
+            "rooms": rooms,
+            "title": "Hello! this see all room",
+        },
+    )
 
 
 def get_amenity(pk):
