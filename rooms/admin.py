@@ -17,8 +17,18 @@ class AmenityAdmin(admin.ModelAdmin):
     )
 
 
+@admin.action(description="Set all prices to zero")
+def reset_prices(model_admin, request, rooms):
+    for room in rooms.all():
+        room.price = 0
+        room.save()
+
+
 @admin.register(models.Room)
 class RoomAdmin(admin.ModelAdmin):
+
+    actions = (reset_prices,)
+
     readonly_fields = (
         "created_at",
         "updated_at",
