@@ -20,6 +20,7 @@ class MyUserAdmin(UserAdmin):
                     "gender",
                     "language",
                     "currency",
+                    "is_host",
                 ),
             },
         ),

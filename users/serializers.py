@@ -4,8 +4,6 @@ from .models import User
 
 
 class UserPrivateSerializer(ModelSerializer):
-    is_host = SerializerMethodField()
-
     class Meta:
         model = User
         fields = (
@@ -18,9 +16,6 @@ class UserPrivateSerializer(ModelSerializer):
             "currency",
             "avatar",
         )
-
-    def get_is_host(self, user: User):
-        return user.is_host()
 
 
 class UserPublicSerialzier(ModelSerializer):

@@ -43,5 +43,7 @@ class User(AbstractUser):
         blank=True,
     )
 
-    def is_host(self):
-        return self.rooms.all().count() > 0
+    is_host = models.BooleanField(default=False)
+
+    # def is_host(self):
+    #     return self.rooms.all().count() > 0
