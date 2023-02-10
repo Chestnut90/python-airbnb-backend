@@ -32,7 +32,20 @@ class RoomReviewAPIView(APIView):
             raise NotFound
 
     def get(self, request, pk):
-        room = self.get_room(pk)
         # TODO : pagination
-        serializer = ReviewSerializer(room.reviews.all(), many=True)
+        try:
+            page = request.query_params.get("page", 1)
+            page = int(page)
+        except:
+            page = 1
+
+        page_size = 3
+        start = (page - 1) * page_size
+        end = start + page_size
+
+        room = self.get_room(pk)
+        serializer = ReviewSerializer(
+            room.reviews.all()[start:end],
+            many=True,
+        )
         return Response(serializer.data)

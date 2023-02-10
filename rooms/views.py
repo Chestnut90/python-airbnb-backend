@@ -73,9 +73,14 @@ class AmenityAPIView(APIView):
         )
         if serializer.is_valid():
             amenity = serializer.save()
-            return Response(serializers.AmenitySerializer(amenity).data)
+            return Response(
+                serializers.AmenitySerializer(amenity).data,
+            )
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
 
     def delete(self, request, pk):
         amenity = get_amenity(pk)
