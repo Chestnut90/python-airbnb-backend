@@ -17,10 +17,14 @@ class RoomSerializer(ModelSerializer):
     owner = UserPublicSerialzier(read_only=True)
     amenities = AmenitySerializer(read_only=True, many=True)
     photos = PhotoSerializer(many=True, read_only=True)
+    rating = SerializerMethodField()
 
     class Meta:
         model = Room
         fields = "__all__"
+
+    def get_rating(self, room):
+        return room.get_rating()
 
 
 class RoomSimpleSerializer(ModelSerializer):

@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.utils import timezone
 from django.shortcuts import render
 
 from rest_framework.views import APIView
@@ -10,6 +11,9 @@ from rest_framework.status import (
     HTTP_204_NO_CONTENT,
 )
 
+from reviews.serializers import ReviewSerializer
+from bookings.models import Booking
+from bookings.serializers import PublicBookingSerializer, CreateRoomBookingSerializer
 from .models import Amenity, Room
 from . import serializers
 
@@ -140,9 +144,6 @@ class RoomAPIView(APIView):
         return Response(HTTP_204_NO_CONTENT)
 
 
-from reviews.serializers import ReviewSerializer
-
-
 class RoomReviewsAPIView(APIView):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -184,3 +185,39 @@ class RoomReviewsAPIView(APIView):
             return Response(ReviewSerializer(review).data)
         else:
             return Response(serializer.errors)
+
+
+class RoomBookingsAPIView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        room = self.get_object(pk)
+        now = timezone.localtime(timezone.now()).date()
+        bookings = Booking.objects.filter(
+            room=room,
+            check_in__gt=now,
+        )
+        serializers = PublicBookingSerializer(bookings, many=True)
+        return Response(serializers.data)
+
+    def post(self, request, pk):
+        room = self.get_object(pk)
+        serializer = CreateRoomBookingSerializer(data=request.data)
+        if serializers.is_valid():
+            booking = serializers.save(
+                room=room,
+                user=request.user,
+            )
+            serializer = PublicBookingSerializer(booking)
+            return Response(serializer.data)
+        else:
+            return Response(
+                serializers.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )

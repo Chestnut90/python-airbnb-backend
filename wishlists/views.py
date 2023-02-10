@@ -6,10 +6,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import NotFound
 
+from rooms.models import Room
+
 from .models import Wishlist
 from .serializers import WishlistSerializer
-
-from rooms.models import Room
 
 
 class WishlistsAPIView(APIView):
