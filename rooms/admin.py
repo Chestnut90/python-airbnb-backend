@@ -34,6 +34,7 @@ class RoomAdmin(admin.ModelAdmin):
         "updated_at",
     )
     list_display = (
+        "pk",
         "name",
         "price",
         "kind",
