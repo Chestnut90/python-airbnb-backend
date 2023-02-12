@@ -97,7 +97,11 @@ class RoomsAPIView(APIView):
 
     def get(self, request):
         rooms = Room.objects.all()
-        serializer = serializers.RoomSimpleSerializer(rooms, many=True)
+        serializer = serializers.RoomSimpleSerializer(
+            rooms,
+            many=True,
+            context={"request": request},
+        )
         return Response(serializer.data)
 
     def post(self, request):
@@ -116,7 +120,10 @@ class RoomsAPIView(APIView):
             serializer = serializers.RoomSerializer(room)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
 
 
 def get_room(pk):
