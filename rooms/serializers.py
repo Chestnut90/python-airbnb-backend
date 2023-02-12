@@ -39,7 +39,7 @@ class RoomSimpleSerializer(ModelSerializer):
     class Meta:
         model = Room
         fields = (
-            "pk",
+            "id",
             "name",
             "address",
             "city",

@@ -113,8 +113,8 @@ class RoomsAPIView(APIView):
 
             with transaction.atomic():
                 room = serializer.save(owner=request.user, amenities=amenities)
-
-            return Response(serializers.RoomSerializer(room).data)
+            serializer = serializers.RoomSerializer(room)
+            return Response(serializer.data)
         else:
             return Response(serializer.errors)
 

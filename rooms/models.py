@@ -49,6 +49,7 @@ class Room(Common):
         "rooms.Amenity",
         related_name="rooms",
     )
+    description = models.TextField(default="")
 
     pet_friendly = models.BooleanField(default=True)
 
