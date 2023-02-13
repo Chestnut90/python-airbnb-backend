@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound, ParseError
+from rest_framework.exceptions import NotFound, ParseError, PermissionDenied
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
@@ -14,6 +14,7 @@ from rest_framework.status import (
 from reviews.serializers import ReviewSerializer
 from bookings.models import Booking
 from bookings.serializers import PublicBookingSerializer, CreateRoomBookingSerializer
+from medias.serializers import PhotoSerializer
 from .models import Amenity, Room
 from . import serializers
 
@@ -226,5 +227,31 @@ class RoomBookingsAPIView(APIView):
         else:
             return Response(
                 serializers.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+
+class RoomPhotoAPIView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_ojbect(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def post(self, request, pk):
+        room = self.get_ojbect(pk)
+        if request.user != room.owner:
+            raise PermissionDenied
+
+        serializer = PhotoSerializer(data=request.data)
+        print(request.data)
+        if serializer.is_valid():
+            photo = serializer.save(room=room)
+            return Response(PhotoSerializer(photo).data)
+        else:
+            return Response(
+                serializer.errors,
                 status=HTTP_400_BAD_REQUEST,
             )

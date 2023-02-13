@@ -25,6 +25,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 GITHUB_SECRET_KEY = env("GITHUB_SECRET_KEY")
+CLOUD_FLARE_ACCOUNT_ID = env("CLOUD_FLARE_ACCOUNT_ID")
+CLOUD_FLARE_API_TOKEN = env("CLOUD_FLARE_API_TOKEN")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
