@@ -216,7 +216,10 @@ class RoomBookingsAPIView(APIView):
 
     def post(self, request, pk):
         room = self.get_object(pk)
-        serializer = CreateRoomBookingSerializer(data=request.data)
+        serializer = CreateRoomBookingSerializer(
+            data=request.data,
+            context={"room": room},
+        )
         if serializers.is_valid():
             booking = serializers.save(
                 room=room,
@@ -229,6 +232,26 @@ class RoomBookingsAPIView(APIView):
                 serializers.errors,
                 status=HTTP_400_BAD_REQUEST,
             )
+
+
+class RoomBookingCheckAPIView(APIView):
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        room = self.get_object(pk)
+        # TODO : check_in and out value validation
+        check_in = request.query_params.get("check_in")
+        check_out = request.query_params.get("check_out")
+        exists = Booking.objects.filter(
+            room=room,
+            check_in__lte=check_in,
+            check_out__gte=check_out,
+        ).exists()
+        return Response({"ok": not exists})
 
 
 class RoomPhotoAPIView(APIView):

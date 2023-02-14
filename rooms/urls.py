@@ -8,6 +8,7 @@ urlpatterns = [
     path("<int:pk>", views.RoomAPIView.as_view()),
     path("<int:pk>/reviews", views.RoomReviewsAPIView.as_view()),
     path("<int:pk>/bookings", views.RoomBookingsAPIView.as_view()),
+    path("<int:pk>/bookings/check", views.RoomBookingCheckAPIView.as_view()),
     path("<int:pk>/photos", views.RoomPhotoAPIView.as_view()),
     path("amenities", views.AmenitiesAPIView.as_view()),
     path("amenities/<int:pk>", views.AmenityAPIView.as_view()),
