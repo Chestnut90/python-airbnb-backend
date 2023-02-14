@@ -220,8 +220,8 @@ class RoomBookingsAPIView(APIView):
             data=request.data,
             context={"room": room},
         )
-        if serializers.is_valid():
-            booking = serializers.save(
+        if serializer.is_valid():
+            booking = serializer.save(
                 room=room,
                 user=request.user,
             )
@@ -229,7 +229,7 @@ class RoomBookingsAPIView(APIView):
             return Response(serializer.data)
         else:
             return Response(
-                serializers.errors,
+                serializer.errors,
                 status=HTTP_400_BAD_REQUEST,
             )
 
@@ -248,8 +248,8 @@ class RoomBookingCheckAPIView(APIView):
         check_out = request.query_params.get("check_out")
         exists = Booking.objects.filter(
             room=room,
-            check_in__lte=check_in,
-            check_out__gte=check_out,
+            check_in__lte=check_out,
+            check_out__gte=check_in,
         ).exists()
         return Response({"ok": not exists})
 
@@ -269,7 +269,7 @@ class RoomPhotoAPIView(APIView):
             raise PermissionDenied
 
         serializer = PhotoSerializer(data=request.data)
-        print(request.data)
+        # print(request.data)
         if serializer.is_valid():
             photo = serializer.save(room=room)
             return Response(PhotoSerializer(photo).data)
