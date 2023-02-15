@@ -13,6 +13,9 @@ from pathlib import Path
 import os
 import environ
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 from . import applications
 from . import databases as db
 
@@ -30,6 +33,7 @@ SECRET_KEY = env("SECRET_KEY")
 GITHUB_SECRET_KEY = env("GITHUB_SECRET_KEY")
 CLOUD_FLARE_ACCOUNT_ID = env("CLOUD_FLARE_ACCOUNT_ID")
 CLOUD_FLARE_API_TOKEN = env("CLOUD_FLARE_API_TOKEN")
+SENTRY_DSN = env("SENTRY_DSN")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = "RENDER" not in os.environ
@@ -154,3 +158,18 @@ MEDIA_URL = "user-uploads/"
 CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000"]
 CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000"]
 CORS_ALLOW_CREDENTIALS = True
+
+if not DEBUG:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[
+            DjangoIntegration(),
+        ],
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production.
+        traces_sample_rate=1.0,
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True,
+    )

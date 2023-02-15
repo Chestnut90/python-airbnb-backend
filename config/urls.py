@@ -19,9 +19,11 @@ from django.urls import path, include
 
 from django.conf import settings
 
-api_v1 = "api/v1/"
+from .views import make_error_and_report_to_sentry
+
 
 urlpatterns = [
+    path("make-error", make_error_and_report_to_sentry),
     path("admin/", admin.site.urls),
     path("api/v1/users/", include("users.urls")),
     path("api/v1/rooms/", include("rooms.urls")),
