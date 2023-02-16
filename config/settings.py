@@ -40,7 +40,7 @@ DEBUG = "RENDER" not in os.environ
 
 ALLOWED_HOSTS = [
     "localhost",
-    "backend.chectnut-clone.click",
+    "backend.chestnut-clone.click",
 ]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
@@ -157,10 +157,22 @@ MEDIA_ROOT = "uploads"
 MEDIA_URL = "user-uploads/"
 
 
-# add cors
-CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000"]
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000"]
+# CORS
+
+if DEBUG:
+    CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000"]
+    CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000"]
+else:
+    CORS_ALLOWED_ORIGINS = ["https://chestnut-clone.click"]
+    CSRF_TRUSTED_ORIGINS = ["https://chestnut-clone.click"]
+
 CORS_ALLOW_CREDENTIALS = True
+
+# Sessions
+if not DEBUG:
+    COOKIE_DOMAINS = ".chestnut-clone.click"
+    SESSION_COOKIE_DOMAIN = COOKIE_DOMAINS
+    CSRF_COOKIE_DOMAIN = COOKIE_DOMAINS
 
 if not DEBUG:
     sentry_sdk.init(
